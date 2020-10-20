@@ -31,6 +31,7 @@ twitch.connect((SERVER, PORT))
 twitch.send(("PASS " + AUTH + "\n" + "NICK "+BOT + "\n" +
              "JOIN #" + CHANNEL + "\n").encode())
 
+
 user = ""
 message = ""
 
@@ -43,7 +44,7 @@ def getusr(line):
 
 
 def getmsg(line, user):
-    message = line.split("PRIVMSG #" + user + ":")[1]
+    message = line.split("PRIVMSG #" + user + " :")[1]
     return message
 
 
@@ -58,10 +59,10 @@ def chatcontrol():
 
     while True:
         try:
-            chatdata = twitch.recv(2048).decode()
+            chatdata = twitch.recv(1024).decode()
         except:
             chatdata = ""
-        for line in data.split("\r\n"):
+        for line in chatdata.split("\r\n"):
             if line == "":
                 continue
             if "PING :tmi.twitch.tv" in line:
@@ -71,19 +72,18 @@ def chatcontrol():
                 print(msg)
                 continue
             else:
-            try:
-                user = getusr(line)
-                message = getmsg(line, user)
-                print(user + ": " + message)
-                # here you can add all the things you want,
-                #  like sound request or alert sounds
-                if "sound request custom reward id" in line:
-                    sendmsg(twitch, "!sr " + message)
-                elif "custom reward id" in line:
-                    sendmsg(twitch, "!reward")
-
-            except Exception:
-                pass
+                try:
+                    user = getusr(line)
+                    message = getmsg(line, user)
+                    print(user + ": " + message)
+                    # here you can add all the things you want,
+                    #  like sound request or alert sounds
+                    if "sound request custom reward id" in line:
+                        sendmsg(twitch, "!sr " + message)
+                    elif "custom reward id" in line:
+                        sendmsg(twitch, "!reward")
+                except Exception:
+                    pass
 
 
 def joinchat():
@@ -96,6 +96,8 @@ def joinchat():
                 print(BOT + " has joined " + CHANNEL + "'s chat")
                 sendmsg(twitch, BOT + " has joined the chat")
                 loading = False
+    twitch.send("CAP REQ :twitch.tv/tags\r\n".encode())
+    print("joined successfully")
 
 
 joinchat()
