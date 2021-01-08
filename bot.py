@@ -9,10 +9,10 @@ PORT = 6667
 '''
 create a auth.txt file containing:
 
-OWNER = |Your twitch account|
-BOT = |Bot's name|
-CHANNEL = |Channel Name (lower case)|
-AUTH = |Twitch OAUTH Code| (get yours here https://twitchapps.com/tmi/)
+OWNER = Your twitch account
+BOT = Bot's name
+CHANNEL = Channel Name (lower case)
+AUTH = Twitch OAUTH Code (get yours here https://twitchapps.com/tmi/)
 '''
 
 JOIN = {}
